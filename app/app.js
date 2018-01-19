@@ -14,6 +14,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { applyRouterMiddleware, Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
+import throttle from 'lodash/throttle';
 import FontFaceObserver from 'fontfaceobserver';
 import { useScroll } from 'react-router-scroll';
 import 'sanitize.css/sanitize.css';
@@ -45,6 +46,13 @@ import './global-styles';
 // Import routes
 import createRoutes from './routes';
 
+// Import sass
+import '../assets/scss/main.scss';
+
+// import persistStore
+import { loadState, saveState } from './persistStore';
+
+
 // Observe loading of Open Sans (to remove open sans, remove the <link> tag in
 // the index.html file and this observer)
 const openSansObserver = new FontFaceObserver('Open Sans', {});
@@ -60,8 +68,18 @@ openSansObserver.load().then(() => {
 // this uses the singleton browserHistory provided by react-router
 // Optionally, this could be changed to leverage a created history
 // e.g. `const browserHistory = useRouterHistory(createBrowserHistory)();`
-const initialState = {};
-const store = configureStore(initialState, browserHistory);
+const persistState = loadState();
+const store = configureStore(persistState || {}, browserHistory);
+
+
+// auto save persistStore each 1s
+store.subscribe(throttle(() => {
+  const states = store.getState().toJS();
+  saveState({
+    global: states.global,
+    language: states.language,
+  });
+}, 1000));
 
 // Sync history and store, as the react-router-redux reducer
 // is under the non-default key ("routing"), selectLocationState
@@ -124,6 +142,6 @@ if (!window.Intl) {
 // Install ServiceWorker and AppCache in the end since
 // it's not most important operation and if main code fails,
 // we do not want it installed
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
   require('offline-plugin/runtime').install(); // eslint-disable-line global-require
 }

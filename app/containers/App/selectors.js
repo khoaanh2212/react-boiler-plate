@@ -23,7 +23,7 @@ const makeSelectError = () => createSelector(
 
 const makeSelectRepos = () => createSelector(
   selectGlobal,
-  (globalState) => globalState.getIn(['userData', 'repositories'])
+  (globalState) => globalState.getIn(['userData', 'repositories']).toJS()
 );
 
 const makeSelectLocationState = () => {

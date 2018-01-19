@@ -20,7 +20,6 @@ export class RepoListItem extends React.PureComponent { // eslint-disable-line r
   render() {
     const item = this.props.item;
     let nameprefix = '';
-
     // If the repository is owned by a different person than we got the data for
     // it's a fork and we should show the name of the owner
     if (item.owner.login !== this.props.currentUser) {
@@ -30,10 +29,10 @@ export class RepoListItem extends React.PureComponent { // eslint-disable-line r
     // Put together the content of the repository
     const content = (
       <Wrapper>
-        <RepoLink href={item.html_url} target="_blank">
+        <RepoLink href={item.hooks_url} target="_blank">
           {nameprefix + item.name}
         </RepoLink>
-        <IssueLink href={`${item.html_url}/issues`} target="_blank">
+        <IssueLink href={`${item.hooks_url}/issues`} target="_blank">
           <IssueIcon />
           <FormattedNumber value={item.open_issues_count} />
         </IssueLink>

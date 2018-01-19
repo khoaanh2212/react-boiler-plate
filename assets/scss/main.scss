@@ -1,0 +1,12 @@
+//Font Bootstrap
+$icon-font-path: "../fonts/bootstrap/" !default;
+
+//Font Awesome
+@import "../fonts/font-awesome/css/font-awesome.min.css";
+
+
+//Bootstrap
+//@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "../../node_modules/bootstrap/scss/bootstrap";
+
+@import "base/all";
