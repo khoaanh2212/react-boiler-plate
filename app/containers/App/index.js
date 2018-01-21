@@ -10,30 +10,32 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
 
-import Header from 'components/Header';
 import Footer from 'components/Footer';
 import withProgressBar from 'components/ProgressBar';
+import MainHeader from 'components/MainHeader';
 
 const AppWrapper = styled.div`
-  max-width: calc(768px + 16px * 2);
+  min-height: 100vh
   margin: 0 auto;
   display: flex;
-  min-height: 100%;
   padding: 0 16px;
   flex-direction: column;
+  background-image: linear-gradient(135deg,#0277bd 0,#8bc34a 100%);
+  padding: 0 150px;
 `;
 
 export function App(props) {
   return (
     <AppWrapper>
       <Helmet
-        titleTemplate="%s - Link Bird"
+        titleTemplate="%s - Qr Code"
         defaultTitle="Link Bird"
         meta={[
           { name: 'description', content: 'A Link Bird application' },
         ]}
       />
-      <Header />
+      <div className="background"></div>
+      <MainHeader />
       {React.Children.toArray(props.children)}
       <Footer />
     </AppWrapper>
