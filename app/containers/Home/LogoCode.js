@@ -31,6 +31,10 @@ export const Wrapper = styled.div`
     }
   }
   
+  .block-color {
+    margin-bottom: 5px;
+  }
+  
 `;
 
 const FORM_NAME = 'LOGO_CODE_FORM';
