@@ -4,6 +4,7 @@ import { Field, reduxForm } from 'redux-form/immutable';
 
 import RenderField from 'components/RenderField';
 
+
 import validate from './validateVisualCode';
 
 export const Wrapper = styled.div``;
@@ -58,7 +59,7 @@ export class VisualCode extends React.Component { //eslint-disable-line
                 className="form-control"
                 name="phone"
                 component={RenderField}
-                type="text"
+                type="number"
               />
             </div>
             <div className="form-group">

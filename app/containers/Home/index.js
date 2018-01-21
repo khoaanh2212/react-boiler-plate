@@ -14,9 +14,10 @@ import styled from 'styled-components';
 import makeSelectHome from './selectors';
 import './style.scss';
 import VisualCode from './VisualCode';
+import GenerateCode from './GenerateCode';
 
 export const Wrapper = styled.div`
-  
+  padding-bottom: 50px;
 `;
 
 const VISUAL_QR_CODE = 'VISUAL_QR_CODE';
@@ -61,6 +62,7 @@ export class Home extends React.PureComponent { // eslint-disable-line react/pre
                 {activeTab === VISUAL_QR_CODE && <VisualCode />}
               </div>
               <div className="col-md-5 col-lg-4 settings-download">
+                <GenerateCode />
               </div>
             </div>
           </div>

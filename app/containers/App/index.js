@@ -17,10 +17,17 @@ const AppWrapper = styled.div`
   min-height: 100vh
   margin: 0 auto;
   display: flex;
-  padding: 0 16px;
+  @media (min-width: 768px) {
+    padding: 0 100px;  
+  }
+  @media (max-width: 768px) {
+    padding: 0 16px;  
+  }
+ 
   flex-direction: column;
   background-image: linear-gradient(135deg,#0277bd 0,#8bc34a 100%);
-  padding: 0 100px;
+  ;
+  overflow: auto;
 `;
 
 export function App(props) {
