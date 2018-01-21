@@ -7,11 +7,11 @@ import { defineMessages } from 'react-intl';
 
 export default defineMessages({
   home: {
-    id: 'link_bird.components.Header.home',
+    id: 'app.components.Header.home',
     defaultMessage: 'Home',
   },
   features: {
-    id: 'link_bird.components.Header.features',
+    id: 'app.components.Header.features',
     defaultMessage: 'Features',
   },
 });

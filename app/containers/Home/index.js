@@ -13,6 +13,7 @@ import styled from 'styled-components';
 
 import makeSelectHome from './selectors';
 import './style.scss';
+import VisualCode from './VisualCode';
 
 export const Wrapper = styled.div`
   
@@ -52,6 +53,17 @@ export class Home extends React.PureComponent { // eslint-disable-line react/pre
             className={`tab ${activeTab === LOGO_QR_CODE && 'active'}`}
             onClick={() => this.toggleTab(LOGO_QR_CODE)}
           >Logo QR Code</Link>
+        </div>
+        <div className="settings">
+          <div className="container-fluid">
+            <div className="row inner">
+              <div className="col-md-7 col-lg-8 settings-options">
+                {activeTab === VISUAL_QR_CODE && <VisualCode />}
+              </div>
+              <div className="col-md-5 col-lg-4 settings-download">
+              </div>
+            </div>
+          </div>
         </div>
       </Wrapper>
     );

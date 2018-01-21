@@ -10,7 +10,6 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
 
-import Footer from 'components/Footer';
 import withProgressBar from 'components/ProgressBar';
 import MainHeader from 'components/MainHeader';
 
@@ -21,7 +20,7 @@ const AppWrapper = styled.div`
   padding: 0 16px;
   flex-direction: column;
   background-image: linear-gradient(135deg,#0277bd 0,#8bc34a 100%);
-  padding: 0 150px;
+  padding: 0 100px;
 `;
 
 export function App(props) {
@@ -29,15 +28,13 @@ export function App(props) {
     <AppWrapper>
       <Helmet
         titleTemplate="%s - Qr Code"
-        defaultTitle="Link Bird"
+        defaultTitle="Qr Code"
         meta={[
-          { name: 'description', content: 'A Link Bird application' },
+          { name: 'description', content: 'Qr Code application' },
         ]}
       />
-      <div className="background"></div>
       <MainHeader />
       {React.Children.toArray(props.children)}
-      <Footer />
     </AppWrapper>
   );
 }

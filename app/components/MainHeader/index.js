@@ -5,10 +5,8 @@
  */
 
 import React from 'react';
-// import styled from 'styled-components';
-
+import { Link } from 'react-router';
 import './style.scss';
-
 
 export class MainHeader extends React.PureComponent { //eslint-disable-line
 
@@ -23,7 +21,6 @@ export class MainHeader extends React.PureComponent { //eslint-disable-line
                   logo here
                 </span>
               </div>
-
               <div className="menu-flex">
                 <ul className="menu d-lg-none menu-icon">
                   <li>
@@ -32,22 +29,22 @@ export class MainHeader extends React.PureComponent { //eslint-disable-line
                 </ul>
                 <ul className="menu d-none d-lg-block">
                   <li className="d-lg-none close">
-                    <a><i className="fa fa-times"></i></a>
+                    <Link><i className="fa fa-times"></i></Link>
                   </li>
                   <li>
-                    <a href="#about">Visual QR code generator</a>
+                    <Link>Visual QR code generator</Link>
                   </li>
                   <li>
-                    <a href="#faq">Track data</a>
+                    <Link>Track data</Link>
                   </li>
                   <li>
-                    <a target="_blank">BLOG</a>
+                    <Link>BLOG</Link>
                   </li>
                   <li className="login-menu">
                     <span>
-                      <a href="https://www.qrcode-monkey.com/qr-code-api-with-logo">Login</a>
-                      <a href="https://www.qrcode-monkey.com/qr-code-api-with-logo">|</a>
-                      <a href="https://www.qrcode-monkey.com#donate" className="btn btn-donate">Register</a>
+                      <Link>Login</Link>
+                      <Link>|</Link>
+                      <Link>Register</Link>
                     </span>
                   </li>
                   <li className="register-menu">

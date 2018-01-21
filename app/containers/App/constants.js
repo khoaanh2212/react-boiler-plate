@@ -9,7 +9,7 @@
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
 
-export const LOAD_REPOS = 'link_bird/App/LOAD_REPOS';
-export const LOAD_REPOS_SUCCESS = 'link_bird/App/LOAD_REPOS_SUCCESS';
-export const LOAD_REPOS_ERROR = 'link_bird/App/LOAD_REPOS_ERROR';
+export const LOAD_REPOS = 'containers/App/LOAD_REPOS';
+export const LOAD_REPOS_SUCCESS = 'containers/App/LOAD_REPOS_SUCCESS';
+export const LOAD_REPOS_ERROR = 'containers/App/LOAD_REPOS_ERROR';
 export const DEFAULT_LOCALE = 'en';

@@ -10,11 +10,11 @@ describe('<Toggle />', () => {
     const defaultDeMessage = 'someOtherContent';
     const messages = defineMessages({
       en: {
-        id: 'link_bird.containers.LocaleToggle.en',
+        id: 'app.containers.LocaleToggle.en',
         defaultMessage: defaultEnMessage,
       },
       de: {
-        id: 'link_bird.containers.LocaleToggle.en',
+        id: 'app.containers.LocaleToggle.en',
         defaultMessage: defaultDeMessage,
       },
     });
