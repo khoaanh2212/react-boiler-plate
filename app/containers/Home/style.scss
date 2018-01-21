@@ -58,7 +58,7 @@
   }
 
   .settings-options {
-    padding: 32px;
+    padding: 16px;
   }
 
   .settings-download {
@@ -117,7 +117,7 @@ input:not([type=range]) {
 
 .form-control {
   border: 1px solid #fff;
-  border-bottom: 1px solid rgba(0,0,0,.05);
+  border-bottom: 1px solid rgba(0, 0, 0, .05);
   border-radius: 0;
   display: block;
   width: 100%;
@@ -126,9 +126,9 @@ input:not([type=range]) {
   line-height: 1.5;
   color: #495057;
   background-color: #fff;
-  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 
-  &:focus{
+  &:focus {
     border: 1px solid #fff;
     border-bottom: 1px solid #03a9f4;
     box-shadow: none;

@@ -15,7 +15,7 @@ export const Wrapper = styled.div`
     display: flex;
   }
   .square-color {
-    width: 41px;
+    width: 45px;
   }
   .form-control[readonly]{
     background: #fff !important;
@@ -35,6 +35,13 @@ export class RenderColorPicker extends React.Component { //eslint-disable-line
     };
   }
 
+  componentWillMount() {
+    const { input } = this.props;
+    if (!input.value) {
+      input.onChange('#000000');
+    }
+  }
+
   componentDidMount() {
     window.addEventListener('click', this.handleClickOutside);
   }
@@ -51,7 +58,7 @@ export class RenderColorPicker extends React.Component { //eslint-disable-line
 
   changeColor = (color) => {
     this.setState({ colorCode: color.hex });
-    this.refInput.value = color.hex;
+    this.props.input.onChange(color.hex);
   }
 
   openPicker = () => {
@@ -59,7 +66,7 @@ export class RenderColorPicker extends React.Component { //eslint-disable-line
   }
 
   render() {
-    const { input, placeholder, meta, onKeyDown } = this.props;
+    const { input, placeholder, meta, onKeyDown, defaultValue } = this.props;
     const error = meta && meta.touched && meta.error;
     let className = this.props.className || 'form-control';
     if (className.indexOf('form-control') === -1) {
@@ -73,12 +80,13 @@ export class RenderColorPicker extends React.Component { //eslint-disable-line
       >
         <Wrapper>
           <div className="block-color">
-            <div className="square-color d-inline-block" style={{ background: this.state.colorCode }}></div>
+            <div
+              className="square-color d-inline-block"
+              style={{ background: input.value || defaultValue }}
+            ></div>
             <input
-              ref={(node) => {
-                this.refInput = node;
-              }}
               {...input}
+              value={input.value || defaultValue}
               placeholder={placeholder}
               className={classNames({ err: error }, className)}
               onChange={(e) => {
@@ -113,6 +121,7 @@ RenderColorPicker.propTypes = {
   meta: PropTypes.object,
   className: PropTypes.string,
   onKeyDown: PropTypes.func,
+  defaultValue: PropTypes.string,
 };
 
 export default RenderColorPicker;

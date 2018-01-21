@@ -15,6 +15,7 @@ import makeSelectHome from './selectors';
 import './style.scss';
 import VisualCode from './VisualCode';
 import GenerateCode from './GenerateCode';
+import LogoCode from './LogoCode';
 
 export const Wrapper = styled.div`
   padding-bottom: 50px;
@@ -60,6 +61,7 @@ export class Home extends React.PureComponent { // eslint-disable-line react/pre
             <div className="row inner">
               <div className="col-md-7 col-lg-8 settings-options">
                 {activeTab === VISUAL_QR_CODE && <VisualCode />}
+                {activeTab === LOGO_QR_CODE && <LogoCode />}
               </div>
               <div className="col-md-5 col-lg-4 settings-download">
                 <GenerateCode />
