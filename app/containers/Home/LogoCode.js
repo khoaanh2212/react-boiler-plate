@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Field, reduxForm, formValueSelector } from 'redux-form/immutable';
 
 import RenderColorPicker from 'components/RenderColorPicker';
+import RenderFileField from 'components/RenderFileField';
 
 export const Wrapper = styled.div`
   .color-group {
@@ -34,6 +35,51 @@ export const Wrapper = styled.div`
   .block-color {
     margin-bottom: 5px;
   }
+  .flex-row {
+    display: flex;
+    margin-left: -10px;
+    margin-right: -10px;
+    .logo-preview {
+      width: 120px;
+      height: 120px;
+      flex-shrink: 0;
+      padding: 8px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #fff;
+      margin: 0 16px 0 0;
+      overflow: hidden;
+      
+      .placeholder {
+        height: 100%;
+      width: 100%;
+      border: 3px dashed #e8eef2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6f787f;
+      text-transform: uppercase;
+      font-size: .8rem;
+      }
+    }
+    .btn {
+      border-radius: 0;
+      min-width: 135px;
+    }
+    .btn-primary {
+      margin-bottom: 5px;
+    }
+  }
+  .file-input {
+    .btn {
+      position: relative;
+      height: 38px;
+      margin-left: 3px;
+      border: none;
+    }
+  }
   
 `;
 
@@ -42,9 +88,29 @@ const SINGLE_COLOR = 'SINGLE_COLOR';
 const GRADIENT_COLOR = 'GRADIENT_COLOR';
 
 export class LogoCode extends React.Component { //eslint-disable-line
+  constructor(props) {
+    super(props);
+    this.state = {
+      logoPreview: null,
+    };
+  }
 
   onSubmit = (values) => {
     console.log(values.toJS());
+  }
+
+  onUploadLogoChange = (e) => {
+    e.preventDefault();
+    const reader = new FileReader();
+    const file = e.target.files[0];
+
+    reader.onloadend = () => {
+      this.setState({
+        file,
+        logoPreview: reader.result,
+      });
+    };
+    reader.readAsDataURL(file);
   }
 
   switchGradientColor = () => {
@@ -70,8 +136,15 @@ export class LogoCode extends React.Component { //eslint-disable-line
     }
   }
 
+  removeLogo = (e) => {
+    e.preventDefault();
+    this.setState({ logoPreview: null });
+    this.props.change('logo', null);
+  }
+
   render() {
     const { handleSubmit, formColorType, formCustomEyeColor } = this.props;
+    const { logoPreview } = this.state;
     return (<Wrapper>
       <form onSubmit={handleSubmit(this.onSubmit)}>
         <div className="form-group ">
@@ -94,12 +167,13 @@ export class LogoCode extends React.Component { //eslint-disable-line
               />{' '}
               Color gradient
             </label>
-            <label htmlFor="customEyeColor" className="form-check-label"><Field
-              name="customEyeColor"
-              id="customEyeColor"
-              component="input"
-              type="checkbox"
-            />{' '} Custom Eye Color</label>
+            <label htmlFor="customEyeColor" className="form-check-label">
+              <Field
+                name="customEyeColor"
+                id="customEyeColor"
+                component="input"
+                type="checkbox"
+              />{' '} Custom Eye Color</label>
           </div>
         </div>
         <div className="form-group foreground-color row">
@@ -181,6 +255,41 @@ export class LogoCode extends React.Component { //eslint-disable-line
               component={RenderColorPicker}
               defaultValue={'#000000'}
             />
+          </div>
+        </div>
+        <div className="flex-row form-group">
+          <div className="logo-preview">
+            <img
+              className={`${!logoPreview && 'hidden'}`} src={logoPreview || ''}
+              style={{ width: '100%', height: '100%' }} alt=""
+            />
+            <div className={`placeholder ${logoPreview && 'hidden'}`}>
+              <span>No Logo</span>
+            </div>
+            <div className="loading-screen">
+              <span className="loader"></span>
+            </div>
+            <div className="upload-progress fade-animation">
+              <div className="loading-bar" style={{ width: '100%' }}></div>
+            </div>
+          </div>
+          <div>
+            <div className="form-group">
+              {/* <div className="btn btn-primary btn-upload">
+                Upload Image
+              </div>*/}
+              <Field
+                className="form-control hidden"
+                id="logo"
+                name="logo"
+                component={RenderFileField}
+                buttonLabel={'Upload Image'}
+                onChangeAction={this.onUploadLogoChange}
+              />
+              <button className="btn btn-default" onClick={(e) => this.removeLogo(e)}>
+                Remove Logo
+              </button>
+            </div>
           </div>
         </div>
       </form>

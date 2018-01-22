@@ -1,3 +1,21 @@
 .hidden {
-  display: none;
+  display: none !important;
+}
+.btn-primary {
+  background-color: #03a9f4;
+  border-color: #03a9f4;
+  &:hover {
+    background-color: #03a9f4;
+    border-color: #03a9f4;
+  }
+}
+
+.btn {
+  cursor: pointer;
+}
+
+.btn-default {
+  background: 0 0;
+  border-color: #6f787f;
+  color: #4b5256;
 }
