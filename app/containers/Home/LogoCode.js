@@ -6,6 +6,10 @@ import { Field, reduxForm, formValueSelector } from 'redux-form/immutable';
 import RenderColorPicker from 'components/RenderColorPicker';
 import RenderFileField from 'components/RenderFileField';
 
+import instagramLogo from './instagram-circle.svg';
+import facebookLogo from './facebook-circle.svg';
+import twitterLogo from './twitter-circle.svg';
+
 export const Wrapper = styled.div`
   .color-group {
     // display: flex;
@@ -81,6 +85,34 @@ export const Wrapper = styled.div`
     }
   }
   
+  .shape-options {
+    margin-left: -10px;
+    .shape {
+      transition: all .3s;
+      cursor: pointer;
+      padding: 6px;
+      width: 60px;
+      height: 60px;
+      border: 3px solid transparent;
+      margin: 0 8px 8px 0;
+      background: #fff;
+      border-radius: .25rem;
+      float: left;
+      opacity: .99;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .sprite-logo {
+        background-repeat: no-repeat;
+        display: block;
+      }
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+  
 `;
 
 const FORM_NAME = 'LOGO_CODE_FORM';
@@ -140,6 +172,11 @@ export class LogoCode extends React.Component { //eslint-disable-line
     e.preventDefault();
     this.setState({ logoPreview: null });
     this.props.change('logo', null);
+  }
+
+  chooseExampleLogo = (e, logo) => {
+    e.preventDefault();
+    this.setState({ logoPreview: logo });
   }
 
   render() {
@@ -275,9 +312,6 @@ export class LogoCode extends React.Component { //eslint-disable-line
           </div>
           <div>
             <div className="form-group">
-              {/* <div className="btn btn-primary btn-upload">
-                Upload Image
-              </div>*/}
               <Field
                 className="form-control hidden"
                 id="logo"
@@ -290,6 +324,20 @@ export class LogoCode extends React.Component { //eslint-disable-line
                 Remove Logo
               </button>
             </div>
+          </div>
+        </div>
+        <div className="form-group shape-group">
+          <div className="shape-options">
+            <button className="shape" onClick={(e) => this.chooseExampleLogo(e, facebookLogo)}>
+              <img src={facebookLogo} alt="facebook logo" />
+            </button>
+            <button className="shape" onClick={(e) => this.chooseExampleLogo(e, twitterLogo)}>
+              <img src={twitterLogo} alt="twitter logo" />
+            </button>
+            <button className="shape" onClick={(e) => this.chooseExampleLogo(e, instagramLogo)}>
+              <img src={instagramLogo} alt="instagram logo" />
+            </button>
+
           </div>
         </div>
       </form>
