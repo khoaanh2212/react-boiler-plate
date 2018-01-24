@@ -248,6 +248,7 @@ export class LogoCode extends React.Component { //eslint-disable-line
           </div>
         </div>
         <div className={`form-group eye-color row ${!formCustomEyeColor && 'hidden'}`}>
+          <label className="text-bold" htmlFor="eyeColor">Eye Color</label>
           <div className="col-sm-6 col-lg-4">
             <Field
               id="eyeFirstColor"
