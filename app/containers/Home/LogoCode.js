@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import styled from 'styled-components';
 import { Field, reduxForm, formValueSelector } from 'redux-form/immutable';
 
@@ -9,6 +10,7 @@ import RenderFileField from 'components/RenderFileField';
 import instagramLogo from './instagram-circle.svg';
 import facebookLogo from './facebook-circle.svg';
 import twitterLogo from './twitter-circle.svg';
+import messages from './messages';
 
 export const Wrapper = styled.div`
   .color-group {
@@ -180,7 +182,7 @@ export class LogoCode extends React.Component { //eslint-disable-line
   }
 
   render() {
-    const { handleSubmit, formColorType, formCustomEyeColor } = this.props;
+    const { handleSubmit, formColorType, formCustomEyeColor, intl: { formatMessage } } = this.props;
     const { logoPreview } = this.state;
     return (<Wrapper>
       <form onSubmit={handleSubmit(this.onSubmit)}>
@@ -193,7 +195,7 @@ export class LogoCode extends React.Component { //eslint-disable-line
                 type="radio"
                 value={SINGLE_COLOR}
               />{' '}
-              Single color
+              <FormattedMessage {...messages.singleColor} />
             </label>
             <label htmlFor="colorType" className="form-check-label">
               <Field
@@ -202,7 +204,7 @@ export class LogoCode extends React.Component { //eslint-disable-line
                 type="radio"
                 value={GRADIENT_COLOR}
               />{' '}
-              Color gradient
+              <FormattedMessage {...messages.colorGradient} />
             </label>
             <label htmlFor="customEyeColor" className="form-check-label">
               <Field
@@ -210,7 +212,7 @@ export class LogoCode extends React.Component { //eslint-disable-line
                 id="customEyeColor"
                 component="input"
                 type="checkbox"
-              />{' '} Custom Eye Color</label>
+              />{' '}<FormattedMessage {...messages.customEyeColor} /></label>
           </div>
         </div>
         <div className="form-group foreground-color row">
@@ -239,16 +241,16 @@ export class LogoCode extends React.Component { //eslint-disable-line
                   <i className="fa fa-exchange"></i>
                 </button>
               </span>
-              <Field name="gradientType" component="select" placeholder="please select">
-                <option value="linear">Linear Gradient</option>
-                <option value="radial">Radial Gradient</option>
+              <Field name="gradientType" component="select" placeholder={formatMessage(messages.pleaseSelect)}>
+                <option value="linear"><FormattedMessage {...messages.linearGradient} /></option>
+                <option value="radial"><FormattedMessage {...messages.radialGradient} /></option>
               </Field>
             </div>
 
           </div>
         </div>
         <div className={`form-group eye-color row ${!formCustomEyeColor && 'hidden'}`}>
-          <label className="text-bold" htmlFor="eyeColor">Eye Color</label>
+          <label className="text-bold" htmlFor="eyeColor"><FormattedMessage {...messages.eyeColor} /></label>
           <div className="col-sm-6 col-lg-4">
             <Field
               id="eyeFirstColor"
@@ -276,7 +278,7 @@ export class LogoCode extends React.Component { //eslint-disable-line
               </span>
               <span className="input-group-btn copy-foreground">
                 <button className="btn btn-swap" type="button" onClick={() => this.copyForeGround()}>
-                  Copy foreground
+                  <FormattedMessage {...messages.copyForeground} />
                 </button>
               </span>
             </div>
@@ -285,7 +287,7 @@ export class LogoCode extends React.Component { //eslint-disable-line
         </div>
         <div className="form-group row">
           <div className="col-sm-6 col-lg-4 form-group">
-            <label className="text-bold" htmlFor="background">Background</label>
+            <label className="text-bold" htmlFor="background"><FormattedMessage {...messages.background} /></label>
             <Field
               id="background"
               className="form-control"
@@ -302,7 +304,7 @@ export class LogoCode extends React.Component { //eslint-disable-line
               style={{ width: '100%', height: '100%' }} alt=""
             />
             <div className={`placeholder ${logoPreview && 'hidden'}`}>
-              <span>No Logo</span>
+              <span><FormattedMessage {...messages.noLogo} /></span>
             </div>
             <div className="loading-screen">
               <span className="loader"></span>
@@ -322,7 +324,7 @@ export class LogoCode extends React.Component { //eslint-disable-line
                 onChangeAction={this.onUploadLogoChange}
               />
               <button className="btn btn-default" onClick={(e) => this.removeLogo(e)}>
-                Remove Logo
+                <FormattedMessage {...messages.removeLogo} />
               </button>
             </div>
           </div>
@@ -355,6 +357,7 @@ LogoCode.propTypes = {
   formEyeFirstColor: PropTypes.string,
   formEyeSecondColor: PropTypes.string,
   formCustomEyeColor: PropTypes.bool,
+  intl: PropTypes.object,
 };
 
 // Decorate with redux-form
@@ -386,4 +389,4 @@ LogoCode = connect( //eslint-disable-line
   }
 )(LogoCode);
 
-export default LogoCode;
+export default injectIntl(LogoCode);

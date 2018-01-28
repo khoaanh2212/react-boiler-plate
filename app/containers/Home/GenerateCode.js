@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import { FormattedMessage } from 'react-intl';
 
 import svg from './default-preview-qr.svg';
+import messages from './messages';
 
 export const Wrapper = styled.div`
   button {
@@ -22,8 +24,8 @@ export class GenerateCode extends React.Component { //eslint-disable-line
           </div>
         </div>
 
-        <button type="button" title="Generate QR code preview" className="btn btn-success">
-          Download QR Code
+        <button type="button" title="" className="btn btn-success">
+          <FormattedMessage {...messages.downloadQRCode} />
         </button>
       </Wrapper>
     );

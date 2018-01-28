@@ -25,7 +25,7 @@ const AppWrapper = styled.div`
   }
  
   flex-direction: column;
-  background-image: linear-gradient(135deg,#0277bd 0,#8bc34a 100%);
+  background-image: linear-gradient(135deg,#f5fd03 0,#8a8a8a 100%);
   ;
   overflow: auto;
 `;

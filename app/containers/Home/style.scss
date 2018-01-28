@@ -6,8 +6,6 @@
   border: 0 !important;
   width: 100%;
   height: 85px;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
   flex-shrink: 0;
   //padding: 0 16px 0 24px;
   overflow-x: auto;
@@ -16,23 +14,18 @@
   margin-bottom: -16px;
 
   .tab {
-    display: -webkit-flex;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-flex-shrink: 0;
-    -ms-flex-negative: 0;
     flex-shrink: 0;
     user-select: inherit;
     height: 56px;
     font-size: .9rem;
-    text-transform: uppercase;
+    text-transform: none;
     line-height: 56px;
     padding: 0 14px;
     opacity: .7;
     box-sizing: border-box;
     border-bottom: 3px solid transparent;
     color: #fff !important;
-    -webkit-transition: all .3s;
     transition: all .3s;
     text-decoration: none;
     cursor: pointer;
@@ -45,6 +38,7 @@
       opacity: 1;
     }
   }
+
 }
 
 .settings {

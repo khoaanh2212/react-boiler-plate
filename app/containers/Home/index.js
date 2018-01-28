@@ -6,6 +6,7 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router';
 import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
@@ -16,6 +17,7 @@ import './style.scss';
 import VisualCode from './VisualCode';
 import GenerateCode from './GenerateCode';
 import LogoCode from './LogoCode';
+import messages from './messages';
 
 export const Wrapper = styled.div`
   padding-bottom: 50px;
@@ -38,10 +40,11 @@ export class Home extends React.PureComponent { // eslint-disable-line react/pre
 
   render() {
     const { activeTab } = this.state;
+    const { intl: { formatMessage } } = this.props;
     return (
       <Wrapper>
         <Helmet
-          title="Home"
+          title={formatMessage(messages.header)}
           meta={[
             { name: 'description', content: 'Description of Home' },
           ]}
@@ -50,11 +53,11 @@ export class Home extends React.PureComponent { // eslint-disable-line react/pre
           <Link
             className={`tab ${activeTab === VISUAL_QR_CODE && 'active'}`}
             onClick={() => this.toggleTab(VISUAL_QR_CODE)}
-          >Visual QR Code</Link>
+          ><FormattedMessage {...messages.visualQRCode} /></Link>
           <Link
             className={`tab ${activeTab === LOGO_QR_CODE && 'active'}`}
             onClick={() => this.toggleTab(LOGO_QR_CODE)}
-          >Logo QR Code</Link>
+          ><FormattedMessage {...messages.logoQRCode} /></Link>
         </div>
         <div className="settings">
           <div className="container-fluid">
@@ -75,7 +78,7 @@ export class Home extends React.PureComponent { // eslint-disable-line react/pre
 }
 
 Home.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  intl: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -88,4 +91,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Home));

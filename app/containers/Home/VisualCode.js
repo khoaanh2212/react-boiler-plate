@@ -1,29 +1,80 @@
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Field, reduxForm } from 'redux-form/immutable';
+import { Link } from 'react-router';
 
 import RenderField from 'components/RenderField';
 
 
 import validate from './validateVisualCode';
+import messages from './messages';
 
-export const Wrapper = styled.div``;
+export const Wrapper = styled.div`
+  .custom-tab {
+    .tab {
+      color: #332c2c !important;
+      &.active, &:hover {
+        border-color: #332c2c;
+        opacity: 1;
+      }
+    }
+  }
+`;
 const FORM_NAME = 'VISUAL_CODE_FORM';
+const URL_TAB = 'URL_TAB';
+const TEXT_TAB = 'TEXT_TAB';
+const EMAIL_TAB = 'EMAIL_TAB';
+const PHONE_TAB = 'PHONE_TAB';
+const V_CARD_TAB = 'V_CARD_TAB';
 
 export class VisualCode extends React.Component { //eslint-disable-line
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeTab: URL_TAB,
+    };
+  }
 
   onSubmit = (values) => {
     console.log(values.toJS());
   };
 
+  toggleTab = (tab) => {
+    this.setState({ activeTab: tab });
+  }
+
   render() {
     const { handleSubmit, valid, pristine } = this.props;
+    const { activeTab } = this.state;
     return (
       <Wrapper>
         <form onSubmit={handleSubmit(this.onSubmit)}>
+          <div className="type-bar-inner custom-tab">
+            <Link
+              className={`tab ${activeTab === URL_TAB && 'active'}`}
+              onClick={() => this.toggleTab(URL_TAB)}
+            ><FormattedMessage {...messages.yourUrl} /></Link>
+            <Link
+              className={`tab ${activeTab === TEXT_TAB && 'active'}`}
+              onClick={() => this.toggleTab(TEXT_TAB)}
+            ><FormattedMessage {...messages.text} /></Link>
+            <Link
+              className={`tab ${activeTab === EMAIL_TAB && 'active'}`}
+              onClick={() => this.toggleTab(EMAIL_TAB)}
+            ><FormattedMessage {...messages.email} /></Link>
+            <Link
+              className={`tab ${activeTab === PHONE_TAB && 'active'}`}
+              onClick={() => this.toggleTab(PHONE_TAB)}
+            ><FormattedMessage {...messages.phone} /></Link>
+            <Link
+              className={`tab ${activeTab === V_CARD_TAB && 'active'}`}
+              onClick={() => this.toggleTab(V_CARD_TAB)}
+            ><FormattedMessage {...messages.vCard} /></Link>
+          </div>
           <div className="pane-content">
-            <div className="form-group">
-              <label className="text-bold" htmlFor="url">URL:</label>
+            <div className={`form-group ${activeTab !== URL_TAB && 'hidden'}`}>
+              <label className="text-bold" htmlFor="url"><FormattedMessage {...messages.url} /></label>
               <Field
                 id="url"
                 className="form-control"
@@ -32,8 +83,8 @@ export class VisualCode extends React.Component { //eslint-disable-line
                 type="text"
               />
             </div>
-            <div className="form-group">
-              <label className="text-bold" htmlFor="text">Text:</label>
+            <div className={`form-group ${activeTab !== TEXT_TAB && 'hidden'}`}>
+              <label className="text-bold" htmlFor="text"><FormattedMessage {...messages.text} /></label>
               <Field
                 id="text"
                 className="form-control"
@@ -42,8 +93,8 @@ export class VisualCode extends React.Component { //eslint-disable-line
                 type="text"
               />
             </div>
-            <div className="form-group">
-              <label className="text-bold" htmlFor="email">Email:</label>
+            <div className={`form-group ${activeTab !== EMAIL_TAB && 'hidden'}`}>
+              <label className="text-bold" htmlFor="email"><FormattedMessage {...messages.email} /></label>
               <Field
                 id="email"
                 className="form-control"
@@ -52,8 +103,8 @@ export class VisualCode extends React.Component { //eslint-disable-line
                 type="text"
               />
             </div>
-            <div className="form-group">
-              <label className="text-bold" htmlFor="phone">Phone:</label>
+            <div className={`form-group ${activeTab !== PHONE_TAB && 'hidden'}`}>
+              <label className="text-bold" htmlFor="phone"><FormattedMessage {...messages.phone} /></label>
               <Field
                 id="phone"
                 className="form-control"
@@ -62,12 +113,11 @@ export class VisualCode extends React.Component { //eslint-disable-line
                 type="number"
               />
             </div>
-            <div className="form-group">
-              <label className="text-bold" htmlFor="VCard">Vcard:</label>
+            <div className={`form-group ${activeTab !== V_CARD_TAB && 'hidden'}`}>
               <div className="row">
                 <div className="col-lg-4 col-sm-6">
                   <div className="form-group">
-                    <label htmlFor="qrcodeVcardFirstname">Firstname</label>
+                    <label htmlFor="qrcodeVcardFirstname"><FormattedMessage {...messages.firstName} /></label>
                     <Field
                       id="qrcodeVcardFirstname"
                       className="form-control"
@@ -79,7 +129,7 @@ export class VisualCode extends React.Component { //eslint-disable-line
                 </div>
                 <div className="col-lg-4 col-sm-6">
                   <div className="form-group">
-                    <label htmlFor="qrcodeVcardLastname">Lastname</label>
+                    <label htmlFor="qrcodeVcardLastname"><FormattedMessage {...messages.lastName} /></label>
                     <Field
                       id="qrcodeVcardLastname"
                       className="form-control"
@@ -91,7 +141,7 @@ export class VisualCode extends React.Component { //eslint-disable-line
                 </div>
                 <div className="col-lg-4 col-sm-6">
                   <div className="form-group">
-                    <label htmlFor="qrcodeVcardOrganization">Organization</label>
+                    <label htmlFor="qrcodeVcardOrganization"><FormattedMessage {...messages.organization} /></label>
                     <Field
                       id="qrcodeVcardOrganization"
                       className="form-control"
@@ -106,7 +156,7 @@ export class VisualCode extends React.Component { //eslint-disable-line
               <div className="row">
                 <div className="col-lg-4 col-sm-6">
                   <div className="form-group">
-                    <label htmlFor="qrcodeVcardTitle">Position (Work)</label>
+                    <label htmlFor="qrcodeVcardTitle"><FormattedMessage {...messages.positionWork} /></label>
                     <Field
                       id="qrcodeVcardTitle"
                       className="form-control"
@@ -118,7 +168,7 @@ export class VisualCode extends React.Component { //eslint-disable-line
                 </div>
                 <div className="col-lg-4 col-sm-6">
                   <div className="form-group">
-                    <label htmlFor="qrcodeVcardPhoneWork">Phone (Work)</label>
+                    <label htmlFor="qrcodeVcardPhoneWork"><FormattedMessage {...messages.phoneWork} /></label>
                     <Field
                       id="qrcodeVcardPhoneWork"
                       className="form-control"
@@ -130,7 +180,7 @@ export class VisualCode extends React.Component { //eslint-disable-line
                 </div>
                 <div className="col-lg-4 col-sm-6">
                   <div className="form-group">
-                    <label htmlFor="qrcodeVcardPhonePrivate">Phone (Private)</label>
+                    <label htmlFor="qrcodeVcardPhonePrivate"><FormattedMessage {...messages.phonePrivate} /></label>
                     <Field
                       id="qrcodeVcardPhonePrivate"
                       className="form-control"
@@ -145,7 +195,7 @@ export class VisualCode extends React.Component { //eslint-disable-line
               <div className="row">
                 <div className="col-lg-4 col-sm-6">
                   <div className="form-group">
-                    <label htmlFor="qrcodeVcardPhoneMobile">Phone (Mobile)</label>
+                    <label htmlFor="qrcodeVcardPhoneMobile"><FormattedMessage {...messages.phoneMobile} /></label>
                     <Field
                       id="qrcodeVcardPhoneMobile"
                       className="form-control"
@@ -157,7 +207,7 @@ export class VisualCode extends React.Component { //eslint-disable-line
                 </div>
                 <div className="col-lg-4 col-sm-6">
                   <div className="form-group">
-                    <label htmlFor="qrcodeVcardFaxWork">Fax (Work)</label>
+                    <label htmlFor="qrcodeVcardFaxWork"><FormattedMessage {...messages.faxWork} /></label>
                     <Field
                       id="qrcodeVcardFaxWork"
                       className="form-control"
@@ -169,7 +219,7 @@ export class VisualCode extends React.Component { //eslint-disable-line
                 </div>
                 <div className="col-lg-4 col-sm-6">
                   <div className="form-group">
-                    <label htmlFor="qrcodeVcardFaxPrivate">Fax (Private)</label>
+                    <label htmlFor="qrcodeVcardFaxPrivate"><FormattedMessage {...messages.faxPrivate} /></label>
                     <Field
                       id="qrcodeVcardFaxPrivate"
                       className="form-control"
@@ -184,7 +234,7 @@ export class VisualCode extends React.Component { //eslint-disable-line
               <div className="row">
                 <div className="col-lg-4 col-sm-6">
                   <div className="form-group">
-                    <label htmlFor="qrcodeVcardEmail">Email</label>
+                    <label htmlFor="qrcodeVcardEmail"><FormattedMessage {...messages.email} /></label>
                     <Field
                       id="qrcodeVcardEmail"
                       className="form-control"
@@ -196,7 +246,7 @@ export class VisualCode extends React.Component { //eslint-disable-line
                 </div>
                 <div className="col-lg-4 col-sm-6">
                   <div className="form-group">
-                    <label htmlFor="qrcodeVcardUrl">Website</label>
+                    <label htmlFor="qrcodeVcardUrl"><FormattedMessage {...messages.website} /></label>
                     <Field
                       id="qrcodeVcardUrl"
                       className="form-control"
@@ -208,7 +258,7 @@ export class VisualCode extends React.Component { //eslint-disable-line
                 </div>
                 <div className="col-lg-4 col-sm-6">
                   <div className="form-group">
-                    <label htmlFor="qrcodeVcardStreet">Street</label>
+                    <label htmlFor="qrcodeVcardStreet"><FormattedMessage {...messages.street} /></label>
                     <Field
                       id="qrcodeVcardStreet"
                       className="form-control"
@@ -223,7 +273,7 @@ export class VisualCode extends React.Component { //eslint-disable-line
               <div className="row">
                 <div className="col-lg-4 col-sm-6">
                   <div className="form-group">
-                    <label htmlFor="qrcodeVcardZipcode">Zipcode</label>
+                    <label htmlFor="qrcodeVcardZipcode"><FormattedMessage {...messages.zipcode} /></label>
                     <Field
                       id="qrcodeVcardZipcode"
                       className="form-control"
@@ -235,7 +285,7 @@ export class VisualCode extends React.Component { //eslint-disable-line
                 </div>
                 <div className="col-lg-4 col-sm-6">
                   <div className="form-group">
-                    <label htmlFor="qrcodeVcardCity">City</label>
+                    <label htmlFor="qrcodeVcardCity"><FormattedMessage {...messages.city} /></label>
                     <Field
                       id="qrcodeVcardCity"
                       className="form-control"
@@ -247,7 +297,7 @@ export class VisualCode extends React.Component { //eslint-disable-line
                 </div>
                 <div className="col-lg-4 col-sm-6">
                   <div className="form-group">
-                    <label htmlFor="qrcodeVcardState">State</label>
+                    <label htmlFor="qrcodeVcardState"><FormattedMessage {...messages.state} /></label>
                     <Field
                       id="qrcodeVcardState"
                       className="form-control"
@@ -261,7 +311,7 @@ export class VisualCode extends React.Component { //eslint-disable-line
               <div className="row">
                 <div className="col-lg-4 col-sm-6">
                   <div className="form-group">
-                    <label htmlFor="qrcodeVcardCountry">Country</label>
+                    <label htmlFor="qrcodeVcardCountry"><FormattedMessage {...messages.country} /></label>
                     <Field
                       id="qrcodeVcardCountry"
                       className="form-control"
@@ -278,14 +328,14 @@ export class VisualCode extends React.Component { //eslint-disable-line
                 disabled={!valid || pristine}
                 className={`btn btn-success m-r-5 ${!valid || pristine ? 'disabled' : ''}`} type="submit"
               >
-                Create
+                <FormattedMessage {...messages.create} />
               </button>
               <button
                 type="button"
                 className="btn btn-inverse"
                 onClick={() => this.closeModal()}
               >
-                Cancel
+                <FormattedMessage {...messages.cancel} />
               </button>
             </div>
 
@@ -302,7 +352,7 @@ VisualCode.propTypes = {
   pristine: PropTypes.bool,
 };
 
-export default reduxForm({
+export default injectIntl(reduxForm({
   form: FORM_NAME,
   validate,
-})(VisualCode);
+})(VisualCode));
