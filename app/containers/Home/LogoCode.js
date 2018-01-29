@@ -205,7 +205,7 @@ export class LogoCode extends React.Component { //eslint-disable-line
       } else {
         // ctx.globalAlpha = 0.8;
         const { top, left } = me.state;
-        ctx.drawImage(this, top, left, 100, 100);
+        ctx.drawImage(this, top, left, 150, 150);
       }
 
       // this line needs to go here
