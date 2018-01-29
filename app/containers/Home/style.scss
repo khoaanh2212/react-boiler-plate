@@ -86,6 +86,11 @@
   border-top-right-radius: calc(.25rem - 1px);
 }
 
+.section-get-started {
+  background: #fff;
+  padding-bottom: 16px;
+}
+
 @media (max-width: 1100px) {
   .settings {
     border-radius: 0;
@@ -102,6 +107,9 @@
       display: flex;
       align-items: stretch;
     }
+  }
+  .section {
+    padding: 32px 8px;
   }
 }
 

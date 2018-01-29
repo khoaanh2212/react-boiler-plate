@@ -18,6 +18,7 @@ import VisualCode from './VisualCode';
 import GenerateCode from './GenerateCode';
 import LogoCode from './LogoCode';
 import messages from './messages';
+import Information from './Information/Information';
 
 export const Wrapper = styled.div`
   padding-bottom: 50px;
@@ -72,6 +73,7 @@ export class Home extends React.PureComponent { // eslint-disable-line react/pre
             </div>
           </div>
         </div>
+        <Information />
       </Wrapper>
     );
   }
