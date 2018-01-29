@@ -11,6 +11,7 @@ import instagramLogo from './instagram-circle.svg';
 import facebookLogo from './facebook-circle.svg';
 import twitterLogo from './twitter-circle.svg';
 import messages from './messages';
+import Naive from './Naive';
 
 export const Wrapper = styled.div`
   .color-group {
@@ -89,6 +90,7 @@ export const Wrapper = styled.div`
   
   .shape-options {
     margin-left: -10px;
+    display: flex;
     .shape {
       transition: all .3s;
       cursor: pointer;
@@ -114,7 +116,15 @@ export const Wrapper = styled.div`
       }
     }
   }
-  
+  .cover-canvas {
+    position: relative;
+    .dnd-container {
+      width: 400px !important;
+      height: 400px !important;
+      position: absolute !important;
+      top: 0;
+    }
+  }
 `;
 
 const FORM_NAME = 'LOGO_CODE_FORM';
@@ -126,6 +136,7 @@ export class LogoCode extends React.Component { //eslint-disable-line
     super(props);
     this.state = {
       logoPreview: null,
+      indexImage: 0,
     };
   }
 
@@ -142,9 +153,11 @@ export class LogoCode extends React.Component { //eslint-disable-line
       this.setState({
         file,
         logoPreview: reader.result,
+        indexImage: this.state.indexImage + 1,
       });
     };
     reader.readAsDataURL(file);
+    this.drawImageInCanvas(e);
   }
 
   switchGradientColor = () => {
@@ -179,6 +192,33 @@ export class LogoCode extends React.Component { //eslint-disable-line
   chooseExampleLogo = (e, logo) => {
     e.preventDefault();
     this.setState({ logoPreview: logo });
+  }
+
+  drawImageInCanvas = (e) => {
+    const ctx = this.refCanvas.getContext('2d');
+    const url = URL.createObjectURL(e.target.files[0]);
+    const img = new Image();
+    const me = this;
+    img.onload = function () {
+      if (me.state.indexImage === 1) {
+        ctx.drawImage(this, 0, 0, 400, 400);
+      } else {
+        // ctx.globalAlpha = 0.8;
+        const { top, left } = me.state;
+        ctx.drawImage(this, top, left, 100, 100);
+      }
+
+      // this line needs to go here
+      const dataImg = me.refCanvas.toDataURL(); // note `me` being used here
+      console.log(dataImg);
+      // consider a callback to pass result to next function in chain
+    };
+    img.src = url;
+  }
+
+  positionPlaceCode = (top, left) => {
+    console.log(top, left);
+    this.setState({ top, left });
   }
 
   render() {
@@ -342,6 +382,15 @@ export class LogoCode extends React.Component { //eslint-disable-line
             </button>
 
           </div>
+          <div className="cover-canvas">
+            <canvas
+              ref={(node) => {
+                this.refCanvas = node;
+              }} width={400} height={400}
+            />
+            <Naive changePosition={this.positionPlaceCode} />
+          </div>
+
         </div>
       </form>
     </Wrapper>);
