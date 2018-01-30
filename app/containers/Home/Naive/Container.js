@@ -28,7 +28,7 @@ export class Container extends Component {
     super(props);
     this.state = {
       boxes: {
-        a: { top: 0, left: 0, title: 'Drag me around' },
+        a: { top: 0, left: 0, title: 'Code position' },
         // b: { top: 180, left: 20, title: 'Drag me too' },
       },
     };

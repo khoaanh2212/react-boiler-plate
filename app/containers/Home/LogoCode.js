@@ -137,6 +137,8 @@ export class LogoCode extends React.Component { //eslint-disable-line
     this.state = {
       logoPreview: null,
       indexImage: 0,
+      left: 0,
+      top: 0,
     };
   }
 
@@ -205,7 +207,7 @@ export class LogoCode extends React.Component { //eslint-disable-line
       } else {
         // ctx.globalAlpha = 0.8;
         const { top, left } = me.state;
-        ctx.drawImage(this, top, left, 150, 150);
+        ctx.drawImage(this, left, top, 150, 150);
       }
 
       // this line needs to go here
@@ -216,9 +218,8 @@ export class LogoCode extends React.Component { //eslint-disable-line
     img.src = url;
   }
 
-  positionPlaceCode = (top, left) => {
-    console.log(top, left);
-    this.setState({ top, left });
+  positionPlaceCode = (left, top) => {
+    this.setState({ left, top });
   }
 
   render() {

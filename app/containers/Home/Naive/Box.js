@@ -8,6 +8,11 @@ const style = {
   backgroundColor: 'white',
   padding: '0.5rem 1rem',
   cursor: 'move',
+  width: '150px',
+  height: '150px',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 };
 
 const boxSource = {
@@ -18,15 +23,6 @@ const boxSource = {
 };
 
 export class Box extends Component {
-  static propTypes = {
-    connectDragSource: PropTypes.func.isRequired,
-    isDragging: PropTypes.bool.isRequired,
-    left: PropTypes.number.isRequired,
-    top: PropTypes.number.isRequired,
-    hideSourceOnDrag: PropTypes.bool.isRequired,
-    children: PropTypes.node,
-  }
-
   render() {
     const {
       hideSourceOnDrag,
@@ -45,6 +41,15 @@ export class Box extends Component {
     );
   }
 }
+
+Box.propTypes = {
+  connectDragSource: PropTypes.func.isRequired,
+  isDragging: PropTypes.bool.isRequired,
+  left: PropTypes.number.isRequired,
+  top: PropTypes.number.isRequired,
+  hideSourceOnDrag: PropTypes.bool.isRequired,
+  children: PropTypes.node,
+};
 
 export default DragSource(ItemTypes.BOX, boxSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
