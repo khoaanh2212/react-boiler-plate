@@ -145,6 +145,52 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
     return wrapperPosition.width - 40;
   }
 
+  getAverageRGB(imgEl) { // eslint-disable-line
+    const blockSize = 5;
+    const defaultRGB = { r: 0, g: 0, b: 0 };
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext && canvas.getContext('2d');
+    let data = null;
+    let width = null;
+    let height = null;
+    let i = -4;
+    let length = null;
+    const rgb = { r: 0, g: 0, b: 0 };
+    let count = 0;
+
+    if (!context) {
+      return defaultRGB;
+    }
+
+    height = canvas.height = imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height;
+    width = canvas.width = imgEl.naturalWidth || imgEl.offsetWidth || imgEl.width;
+
+    context.drawImage(imgEl, 0, 0);
+
+    try {
+      data = context.getImageData(0, 0, width, height);
+    } catch (e) {
+      /* security error, img on diff domain */
+      return defaultRGB;
+    }
+
+    length = data.data.length;
+
+    while ((i += blockSize * 4) < length) { // eslint-disable-line
+      ++count; // eslint-disable-line
+      rgb.r += data.data[i];
+      rgb.g += data.data[i + 1];
+      rgb.b += data.data[i + 2];
+    }
+
+    // ~~ used to floor values
+    rgb.r = ~~(rgb.r / count); // eslint-disable-line
+    rgb.g = ~~(rgb.g / count); // eslint-disable-line
+    rgb.b = ~~(rgb.b / count); // eslint-disable-line
+
+    return rgb;
+  }
+
   removeBackground = (e) => {
     e.preventDefault();
     this.setState({ backgroudPreview: null });
@@ -169,8 +215,8 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
       const maxWidth = me.getMaxWidthCanvas();
       const ratio = maxWidth / imgWidth;
       const newHeight = imgHeight * ratio;
-      console.log(maxWidth, newHeight);
-      me.setState({ canvasWidth: maxWidth, canvasHeight: newHeight });
+      const rgb = me.getAverageRGB(this);
+      me.setState({ canvasWidth: maxWidth, canvasHeight: newHeight, dominantColorOfBackground: rgb });
       if (me.state.indexImage === 1) {
         ctx.drawImage(this, 0, 0, maxWidth, newHeight);
       } else {
@@ -267,7 +313,6 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
                       this.setState({ x: d.x, y: d.y });
                     }}
                     onResize={(e, direction, ref, delta, position) => {
-                      console.log(position);
                       this.setState({
                         width: ref.offsetWidth,
                         height: ref.offsetHeight,
