@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Field, reduxForm } from 'redux-form/immutable';
 import { Link } from 'react-router';
@@ -9,6 +10,8 @@ import RenderField from 'components/RenderField';
 
 import validate from './validateVisualCode';
 import messages from './messages';
+
+import { VISUAL_CODE_FORM } from './constants';
 
 export const Wrapper = styled.div`
   .custom-tab {
@@ -21,7 +24,6 @@ export const Wrapper = styled.div`
     }
   }
 `;
-const FORM_NAME = 'VISUAL_CODE_FORM';
 const URL_TAB = 'URL_TAB';
 const TEXT_TAB = 'TEXT_TAB';
 const EMAIL_TAB = 'EMAIL_TAB';
@@ -352,7 +354,9 @@ VisualCode.propTypes = {
   pristine: PropTypes.bool,
 };
 
-export default injectIntl(reduxForm({
-  form: FORM_NAME,
+export default injectIntl(connect(undefined, undefined)(reduxForm({ //eslint-disable-line
+  form: VISUAL_CODE_FORM,
+  destroyOnUnmount: false, //        <------ preserve form data
+  forceUnregisterOnUnmount: true, // <------ unregister fields on unmount
   validate,
-})(VisualCode));
+})(VisualCode)));
