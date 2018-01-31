@@ -206,3 +206,15 @@ export const getProjectOpts = (projects) => {
   }));
 };
 
+export const convertObjectToParamUrl = (obj, isEncode = false) => {
+  if (!obj || (obj && obj.length === 0)) return '';
+  let result = '';
+  Object.keys(obj).map((key, index) => { //eslint-disable-line
+    if (index === 0) {
+      result += `?${key}=${isEncode ? encodeURI(obj[key]) : obj[key]}`;
+    } else {
+      result += `&${key}=${isEncode ? encodeURI(obj[key]) : obj[key]}`;
+    }
+  });
+  return result;
+};

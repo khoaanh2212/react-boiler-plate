@@ -7,9 +7,9 @@ import { Field, reduxForm, formValueSelector } from 'redux-form/immutable';
 import RenderColorPicker from 'components/RenderColorPicker';
 import RenderFileField from 'components/RenderFileField';
 
-import instagramLogo from './instagram-circle.svg';
-import facebookLogo from './facebook-circle.svg';
-import twitterLogo from './twitter-circle.svg';
+import instagramLogo from './Images/instagram-circle.svg';
+import facebookLogo from './Images/facebook-circle.svg';
+import twitterLogo from './Images/twitter-circle.svg';
 import messages from './messages';
 import Naive from './Naive';
 

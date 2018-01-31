@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
 
-import svg from './default-preview-qr.svg';
+import svg from './Images/default-preview-qr.svg';
 import messages from './messages';
 
 export const Wrapper = styled.div`

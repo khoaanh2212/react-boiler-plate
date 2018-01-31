@@ -6,14 +6,14 @@
 
 import { fromJS } from 'immutable';
 import {
-  DEFAULT_ACTION,
+  GET_QR_CODE_ACTION,
 } from './constants';
 
 const initialState = fromJS({});
 
 function homeReducer(state = initialState, action) {
   switch (action.type) {
-    case DEFAULT_ACTION:
+    case GET_QR_CODE_ACTION:
       return state;
     default:
       return state;

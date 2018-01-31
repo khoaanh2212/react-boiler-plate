@@ -9,7 +9,7 @@
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
 
-export const LOAD_REPOS = 'containers/App/LOAD_REPOS';
-export const LOAD_REPOS_SUCCESS = 'containers/App/LOAD_REPOS_SUCCESS';
-export const LOAD_REPOS_ERROR = 'containers/App/LOAD_REPOS_ERROR';
+export const ON_LOAD_ACTION = 'containers/App/ON_LOAD_ACTION';
+export const LOAD_SUCCESS_ACTION = 'containers/App/LOAD_SUCCESS_ACTION';
+export const LOAD_ERROR_ACTION = 'containers/App/LOAD_ERROR_ACTION';
 export const DEFAULT_LOCALE = 'en';

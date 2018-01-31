@@ -18,27 +18,27 @@ const color = {
 const environment = {
   development: {
     api: {
-      host: 'http://api.mycontentbird.test',
-      port: 8000,
-      url: 'http://api.mycontentbird.test:8000',
+      host: '159.65.2.196',
+      port: 3000,
+      url: 'http://159.65.2.196:3000',
     },
     upload: uploadConfig,
     color,
   },
   local: {
     api: {
-      host: 'http://api.mycontentbird.test',
-      port: 8000,
-      url: 'http://api.mycontentbird.test:8000',
+      host: '159.65.2.196',
+      port: 3000,
+      url: 'http://159.65.2.196:3000',
     },
     upload: uploadConfig,
     color,
   },
   staging: {
     api: {
-      host: 'https://stage1-backend.staging.mycontentbird.io',
-      port: 80,
-      url: 'https://stage1-backend.staging.mycontentbird.io',
+      host: '159.65.2.196',
+      port: 3000,
+      url: 'http://159.65.2.196:3000',
     },
     upload: uploadConfig,
     color,

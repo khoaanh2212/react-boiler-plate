@@ -12,6 +12,8 @@ import RenderFileField from 'components/RenderFileField';
 
 import messages from './messages';
 import { VISUAL_CODE_FORM } from './constants';
+import blankQRCode from './Images/qr-code_QRzebra.svg';
+import { actionGetQRCode } from './actions';
 // import Naive from './Naive';
 
 export const Wrapper = styled.div`
@@ -31,7 +33,7 @@ export const Wrapper = styled.div`
   }
   
   .flex-row {
-    display: flex;
+    // display: flex;
     margin-left: -10px;
     margin-right: -10px;
     .logo-preview {
@@ -46,6 +48,7 @@ export const Wrapper = styled.div`
       background-color: #fff;
       margin: 0 16px 0 0;
       overflow: hidden;
+      margin: 0 auto 10px;
       
       .placeholder {
         height: 100%;
@@ -58,6 +61,9 @@ export const Wrapper = styled.div`
       text-transform: uppercase;
       font-size: .8rem;
       }
+    }
+    .file-input {
+      text-align: center;
     }
     .btn {
       border-radius: 0;
@@ -88,6 +94,10 @@ export const Wrapper = styled.div`
       opacity: 1;
       .canvas-container {
         display: inline-block;
+        .img-cover {
+          width: 100%;
+          height: 100%;
+        }
       }
     }
   }
@@ -120,8 +130,20 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
     };
   }
 
-  onSubmit = (values) => {
-    console.log(values.toJS());
+  onSubmit = (values) => { //eslint-disable-line
+    const { onGetCode } = this.props;
+    const { dominantColorOfBackground } = this.state;
+    const data = {
+      text: 'http://www.qrzebra.com',
+      size: 500,
+      colorDark: `rgba(${dominantColorOfBackground.r},${dominantColorOfBackground.g},${dominantColorOfBackground.b},1)`,
+      dotScale: 0.75,
+      eye_outer: 1,
+      eye_inner: 1,
+      radiusData: 10,
+    };
+    onGetCode(data);
+    console.log(values.toJS(), this.state.dominantColorOfBackground);
   }
 
   onUploadBackgroundChange = (e) => {
@@ -145,7 +167,13 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
     return wrapperPosition.width - 40;
   }
 
-  getAverageRGB(imgEl) { // eslint-disable-line
+  getMaxHeightCanvas = () => {
+    const wrapperPosition = ReactDOM.findDOMNode(this.refWrapperCanvas) &&
+      ReactDOM.findDOMNode(this.refWrapperCanvas).getBoundingClientRect();
+    return wrapperPosition.height - 40;
+  }
+
+  getAverageRGB = (imgEl) => { // eslint-disable-line
     const blockSize = 5;
     const defaultRGB = { r: 0, g: 0, b: 0 };
     const canvas = document.createElement('canvas');
@@ -220,7 +248,6 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
       if (me.state.indexImage === 1) {
         ctx.drawImage(this, 0, 0, maxWidth, newHeight);
       } else {
-        // ctx.globalAlpha = 0.8;
         const { x, y, width, height } = me.state;
         ctx.drawImage(this, x, y, width, height);
       }
@@ -243,7 +270,7 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
     return (<Wrapper>
       <form onSubmit={handleSubmit(this.onSubmit)}>
         <div className="container-qrfields scanova-qrbox row">
-          <div className="col-md-4 designer-options">
+          <div className="col-md-4 col-sm-12 designer-options">
             <div>
               <h4 className="title scanova-header">Background Image</h4>
               <div className="flex-row form-group">
@@ -256,7 +283,7 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
                     <span><FormattedMessage {...messages.noLogo} /></span>
                   </div>
                 </div>
-                <div>
+                <div className="col-sx-12">
                   <div className="form-group">
                     <Field
                       className="form-control hidden"
@@ -266,9 +293,6 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
                       buttonLabel={'Upload Image'}
                       onChangeAction={this.onUploadBackgroundChange}
                     />
-                    <button className="btn btn-default" onClick={(e) => this.removeBackground(e)}>
-                      <FormattedMessage {...messages.removeLogo} />
-                    </button>
                   </div>
                 </div>
               </div>
@@ -283,7 +307,7 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
               </div>
             </div>
           </div>
-          <div className="col-md-8 designer-options">
+          <div className="col-md-8 col-sm-12 designer-options">
             <div className="canvas-area">
               <div className="text-center title">
                 <p className="">Drag to Reposition QR Code on Background Image</p>
@@ -301,26 +325,42 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
                     }} width={this.state.canvasWidth} height={this.state.canvasHeight}
                   />
                   <Rnd
-                    style={{ background: '#ddd' }}
+                    // style={{ background: '#ddd' }}
+                    style={{ backgroundImage: `url(${blankQRCode})`, backgroundSize: '100%', background: '#ddd' }}
+                    size={{ width: this.state.width, height: this.state.height }}
+                    position={{ x: this.state.x, y: this.state.y }}
                     bounds="parent"
-                    default={{
-                      x: 0,
-                      y: 0,
-                      width: 100,
-                      height: 100,
+                    enableResizing={{
+                      top: false,
+                      right: false,
+                      bottom: false,
+                      left: false,
+                      topRight: true,
+                      bottomRight: true,
+                      bottomLeft: true,
+                      topLeft: true,
                     }}
                     onDragStop={(e, d) => {
                       this.setState({ x: d.x, y: d.y });
                     }}
                     onResize={(e, direction, ref, delta, position) => {
+                      const maxWidthBox = this.getMaxWidthCanvas();
+                      const maxHeightBox = this.getMaxHeightCanvas();
+                      const diffWidth = (ref.offsetWidth + position.x) - maxWidthBox;
+                      const diffHeight = (ref.offsetHeight + position.y) - maxHeightBox;
+                      /* const mainWidth = diffWidth > 0 ? ref.offsetWidth - diffWidth : ref.offsetWidth;
+                      const mainHeight = diffHeight > 0 ? ref.offsetHeight - diffHeight : ref.offsetHeight;
+                      const diffSwitchWidth = (mainHeight + position.x) - maxWidthBox;
+                      const diffSwitchHeight = (mainWidth + position.y) - maxHeightBox;
+                      const mainSize = diffSwitchWidth < 0 ? mainWidth : mainHeight;*/
                       this.setState({
-                        width: ref.offsetWidth,
-                        height: ref.offsetHeight,
+                        width: diffWidth > 0 ? ref.offsetWidth - diffWidth : ref.offsetWidth,
+                        height: diffHeight > 0 ? ref.offsetHeight - diffHeight : ref.offsetHeight,
                         ...position,
                       });
                     }}
                   >
-                    Choose position for QRCode
+
                   </Rnd>
                 </div>
               </div>
@@ -351,6 +391,14 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
 }
 
 CustomVisualCode.propTypes = {
+  onGetCode: PropTypes.func,
+};
+
+export const mapDispatchToProps = (dispatch) => ({
+  onGetCode: (data) => dispatch(actionGetQRCode(data)),
+});
+
+CustomVisualCode.propTypes = {
   handleSubmit: PropTypes.func,
   change: PropTypes.func,
 };
@@ -376,4 +424,4 @@ CustomVisualCode = connect( //eslint-disable-line
   }
 )(CustomVisualCode);
 
-export default injectIntl(CustomVisualCode);
+export default injectIntl(connect(undefined, mapDispatchToProps)(CustomVisualCode));

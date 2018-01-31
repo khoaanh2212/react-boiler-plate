@@ -5,11 +5,12 @@
  */
 
 import {
-  DEFAULT_ACTION,
+  GET_QR_CODE_ACTION,
 } from './constants';
 
-export function defaultAction() {
+export function actionGetQRCode(data) {
   return {
-    type: DEFAULT_ACTION,
+    type: GET_QR_CODE_ACTION,
+    data,
   };
 }
