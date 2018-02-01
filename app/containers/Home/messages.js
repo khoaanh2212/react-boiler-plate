@@ -174,4 +174,8 @@ export default defineMessages({
     id: 'app.containers.Home.downloadQRCode',
     defaultMessage: 'Download QR Code',
   },
+  customCode: {
+    id: 'app.containers.Home.customCode',
+    defaultMessage: 'Custom QR Code',
+  },
 });

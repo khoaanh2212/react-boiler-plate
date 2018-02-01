@@ -326,14 +326,7 @@ export class VisualCodeMainInfo extends React.Component { //eslint-disable-line
                 disabled={!valid || pristine}
                 className={`btn btn-success m-r-5 ${!valid || pristine ? 'disabled' : ''}`} type="submit"
               >
-                <FormattedMessage {...messages.create} />
-              </button>
-              <button
-                type="button"
-                className="btn btn-inverse"
-                onClick={() => this.closeModal()}
-              >
-                <FormattedMessage {...messages.cancel} />
+                <FormattedMessage {...messages.customCode} />
               </button>
             </div>
 
