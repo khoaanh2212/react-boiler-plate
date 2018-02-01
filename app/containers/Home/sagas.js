@@ -3,9 +3,8 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { resetLoading } from 'react-redux-loading-bar';
 
 
-import request, { getOptions } from 'utils/request';
+import request, { postOptions } from 'utils/request';
 import config from 'config';
-import { convertObjectToParamUrl } from 'utils/common';
 
 import { actionOnLoad, actionLoadSuccess, actionLoadError } from 'containers/App/actions';
 
@@ -15,19 +14,20 @@ import {
 import {} from './actions';
 
 export function* getQRCode(action) {
-  const { data } = action;
-  const strParam = convertObjectToParamUrl(data, true);
+  const { data, resolve, reject } = action;
   try {
     yield put(actionOnLoad());
-    const url = `${config.api.url}/qrcodes${strParam}`;
-    const options = getOptions();
-    const result = yield call(request, url, options); //eslint-disable-line
+    const url = `${config.api.url}/qrcodes`;
+    const options = postOptions(data);
+    const result = yield call(request, url, options);
     yield put(actionLoadSuccess());
+    resolve(result.data);
   } catch (err) {
     if (err.response) {
       const errResp = yield err.response.json();
       const errCode = errResp.statusCode ? errResp.statusCode : err.message;
       yield put(actionLoadError(errCode));
+      reject(errCode);
     }
   }
 }

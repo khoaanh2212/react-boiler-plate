@@ -1,6 +1,7 @@
 .hidden {
   display: none !important;
 }
+
 .btn-primary {
   background-color: #03a9f4;
   border-color: #03a9f4;
@@ -22,4 +23,20 @@
 
 .text-center {
   text-align: center;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cover {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 888;
+  background: rgba(255, 255, 255, 0.6);
 }

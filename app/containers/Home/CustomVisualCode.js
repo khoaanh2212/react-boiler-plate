@@ -7,13 +7,18 @@ import styled from 'styled-components';
 import { Field, reduxForm, formValueSelector } from 'redux-form/immutable';
 import Rnd from 'react-rnd';
 import ReactDOM from 'react-dom';
+import { createStructuredSelector } from 'reselect';
 
 import RenderFileField from 'components/RenderFileField';
+import BubbleSpinLoader from 'components/BubbleSpinLoader';
+
+import { makeSelectLoading } from 'containers/App/selectors';
 
 import messages from './messages';
 import { VISUAL_CODE_FORM } from './constants';
 import blankQRCode from './Images/qr-code_QRzebra.svg';
 import { actionGetQRCode } from './actions';
+
 // import Naive from './Naive';
 
 export const Wrapper = styled.div`
@@ -115,6 +120,9 @@ export const Wrapper = styled.div`
   }
 `;
 
+const DRAW_BACKGROUND = 'DRAW_BACKGROUND';
+const DRAW_QRCODE = 'DRAW_QRCODE';
+
 export class CustomVisualCode extends React.Component { //eslint-disable-line
   constructor(props) {
     super(props);
@@ -127,23 +135,29 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
       height: 100,
       canvasWidth: 270,
       canvasHeight: 270,
+      previewMode: false,
     };
   }
 
   onSubmit = (values) => { //eslint-disable-line
-    const { onGetCode } = this.props;
-    const { dominantColorOfBackground } = this.state;
-    const data = {
-      text: 'http://www.qrzebra.com',
-      size: 500,
-      colorDark: `rgba(${dominantColorOfBackground.r},${dominantColorOfBackground.g},${dominantColorOfBackground.b},1)`,
-      dotScale: 0.75,
-      eye_outer: 1,
-      eye_inner: 1,
-      radiusData: 10,
-    };
-    onGetCode(data);
-    console.log(values.toJS(), this.state.dominantColorOfBackground);
+    const { loading, onGetCode } = this.props;
+    if (loading) return false;
+    return new Promise((resolve, reject) => {
+      const { dominantColorOfBackground } = this.state;
+      const data = {
+        text: 'http://www.qrzebra.com',
+        size: 500,
+        colorDark: `rgba(${dominantColorOfBackground.r},${dominantColorOfBackground.g},${dominantColorOfBackground.b},1)`,
+        dotScale: 0.75,
+        eye_outer: 1,
+        eye_inner: 1,
+        radiusData: 10,
+      };
+      onGetCode(data, resolve, reject);
+    }).then((result) => {
+      this.setState({ previewMode: true });
+      console.log(result);
+    });
   }
 
   onUploadBackgroundChange = (e) => {
@@ -158,7 +172,7 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
       });
     };
     reader.readAsDataURL(file);
-    this.drawImageInCanvas(e);
+    this.drawImageInCanvas(file, DRAW_BACKGROUND);
   }
 
   getMaxWidthCanvas = () => {
@@ -225,14 +239,9 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
     this.props.change('background', null);
   }
 
-  chooseExampleLogo = (e, logo) => {
-    e.preventDefault();
-    this.setState({ backgroudPreview: logo });
-  }
-
-  drawImageInCanvas = (e) => {
+  drawImageInCanvas = (file, drawStatus) => {
     const ctx = this.refCanvas.getContext('2d');
-    const url = URL.createObjectURL(e.target.files[0]);
+    const url = URL.createObjectURL(file);
 
     const img = new Image();
     const me = this;
@@ -245,9 +254,9 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
       const newHeight = imgHeight * ratio;
       const rgb = me.getAverageRGB(this);
       me.setState({ canvasWidth: maxWidth, canvasHeight: newHeight, dominantColorOfBackground: rgb });
-      if (me.state.indexImage === 1) {
+      if (drawStatus === DRAW_BACKGROUND) {
         ctx.drawImage(this, 0, 0, maxWidth, newHeight);
-      } else {
+      } else if (drawStatus === DRAW_QRCODE) {
         const { x, y, width, height } = me.state;
         ctx.drawImage(this, x, y, width, height);
       }
@@ -264,9 +273,15 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
     this.setState({ left, top });
   }
 
+  rePositionQRCode = (e) => {
+    e.preventDefault();
+    this.setState({ previewMode: false });
+    this.drawImageInCanvas(this.state.file, DRAW_BACKGROUND);
+  }
+
   render() {
-    const { handleSubmit } = this.props;
-    const { backgroudPreview } = this.state;
+    const { handleSubmit, loading } = this.props;
+    const { backgroudPreview, previewMode } = this.state;
     return (<Wrapper>
       <form onSubmit={handleSubmit(this.onSubmit)}>
         <div className="container-qrfields scanova-qrbox row">
@@ -318,7 +333,9 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
                   this.refWrapperCanvas = node;
                 }}
               >
+
                 <div className="canvas-container">
+                  {loading && <BubbleSpinLoader className="cover" />}
                   <canvas
                     ref={(node) => {
                       this.refCanvas = node;
@@ -326,10 +343,11 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
                   />
                   <Rnd
                     // style={{ background: '#ddd' }}
-                    style={{ backgroundImage: `url(${blankQRCode})`, backgroundSize: '100%', background: '#ddd' }}
+                    style={{ backgroundImage: `url(${blankQRCode})`, backgroundSize: '100%' }}
                     size={{ width: this.state.width, height: this.state.height }}
                     position={{ x: this.state.x, y: this.state.y }}
                     bounds="parent"
+                    className={`${(!backgroudPreview || previewMode) && 'hidden'}`}
                     enableResizing={{
                       top: false,
                       right: false,
@@ -348,11 +366,6 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
                       const maxHeightBox = this.getMaxHeightCanvas();
                       const diffWidth = (ref.offsetWidth + position.x) - maxWidthBox;
                       const diffHeight = (ref.offsetHeight + position.y) - maxHeightBox;
-                      /* const mainWidth = diffWidth > 0 ? ref.offsetWidth - diffWidth : ref.offsetWidth;
-                      const mainHeight = diffHeight > 0 ? ref.offsetHeight - diffHeight : ref.offsetHeight;
-                      const diffSwitchWidth = (mainHeight + position.x) - maxWidthBox;
-                      const diffSwitchHeight = (mainWidth + position.y) - maxHeightBox;
-                      const mainSize = diffSwitchWidth < 0 ? mainWidth : mainHeight;*/
                       this.setState({
                         width: diffWidth > 0 ? ref.offsetWidth - diffWidth : ref.offsetWidth,
                         height: diffHeight > 0 ? ref.offsetHeight - diffHeight : ref.offsetHeight,
@@ -365,21 +378,13 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
                 </div>
               </div>
               <div className="row btn-action">
-                <div className="col-sm-4 col-lg-4">
-                  <button id="preview-but" className="btn btn-default btn-block btn-sm btn-scanova-def">
+                <div className="col-sm-6 col-lg-6">
+                  <button className="btn btn-default btn-block" onClick={(e) => this.rePositionQRCode(e)}>
                     Reposition QR Code
                   </button>
                 </div>
-                <div className="col-sm-5 col-lg-4">
-                  <button
-                    id="preview-but"
-                    className="btn btn-default btn-block btn-scanova-def btn-sm ng-isolate-scope"
-                  >
-                    Save Design
-                  </button>
-                </div>
-                <div className="col-sm-3 col-lg-4">
-                  <button id="preview-but" className="btn btn-default btn-block btn-sm btn-scanova-def">Preview</button>
+                <div className="col-sm-6 col-lg-6">
+                  <button className="btn btn-default btn-block">Preview</button>
                 </div>
               </div>
             </div>
@@ -392,10 +397,15 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
 
 CustomVisualCode.propTypes = {
   onGetCode: PropTypes.func,
+  loading: PropTypes.bool,
 };
 
+const mapStateToProps = () => createStructuredSelector({
+  loading: makeSelectLoading(),
+});
+
 export const mapDispatchToProps = (dispatch) => ({
-  onGetCode: (data) => dispatch(actionGetQRCode(data)),
+  onGetCode: (data, resolve, reject) => dispatch(actionGetQRCode(data, resolve, reject)),
 });
 
 CustomVisualCode.propTypes = {
@@ -424,4 +434,4 @@ CustomVisualCode = connect( //eslint-disable-line
   }
 )(CustomVisualCode);
 
-export default injectIntl(connect(undefined, mapDispatchToProps)(CustomVisualCode));
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(CustomVisualCode));

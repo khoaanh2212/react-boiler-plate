@@ -51,3 +51,14 @@ export function getOptions(method = 'GET') {
     },
   };
 }
+
+export function postOptions(body, method = 'POST') {
+  return {
+    method,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  };
+}
