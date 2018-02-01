@@ -7,6 +7,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import './style.scss';
+import Logo from './Logo_QRzebra.png';
 
 export class MainHeader extends React.PureComponent { //eslint-disable-line
 
@@ -18,7 +19,7 @@ export class MainHeader extends React.PureComponent { //eslint-disable-line
             <div className="row">
               <div className="logo-flex">
                 <span>
-                  logo here
+                  <img src={Logo} alt="" style={{ width: '150px' }} />
                 </span>
               </div>
               <div className="menu-flex">
