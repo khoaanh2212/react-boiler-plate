@@ -11,7 +11,6 @@ import instagramLogo from './Images/instagram-circle.svg';
 import facebookLogo from './Images/facebook-circle.svg';
 import twitterLogo from './Images/twitter-circle.svg';
 import messages from './messages';
-import Naive from './Naive';
 
 export const Wrapper = styled.div`
   .color-group {
@@ -383,15 +382,6 @@ export class LogoCode extends React.Component { //eslint-disable-line
             </button>
 
           </div>
-          <div className="cover-canvas">
-            <canvas
-              ref={(node) => {
-                this.refCanvas = node;
-              }} width={400} height={400}
-            />
-            <Naive changePosition={this.positionPlaceCode} />
-          </div>
-
         </div>
       </form>
     </Wrapper>);
