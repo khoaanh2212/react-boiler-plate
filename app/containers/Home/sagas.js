@@ -17,7 +17,7 @@ export function* getQRCode(action) {
   const { data, resolve, reject } = action;
   try {
     yield put(actionOnLoad());
-    const url = `${config.api.url}/qrcodes`;
+    const url = `${config.api.url}/qrcodes/qr1`;
     const options = postOptions(data);
     const result = yield call(request, url, options);
     yield put(actionLoadSuccess());

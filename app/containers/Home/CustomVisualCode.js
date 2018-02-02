@@ -131,8 +131,8 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
       indexImage: 0,
       x: 0,
       y: 0,
-      width: 100,
-      height: 100,
+      width: 200,
+      height: 200,
       canvasWidth: 270,
       canvasHeight: 270,
       previewMode: false,
@@ -146,7 +146,7 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
       const { dominantColorOfBackground } = this.state;
       const data = {
         text: 'http://www.qrzebra.com',
-        size: 500,
+        // size: 300,
         colorDark: `rgba(${dominantColorOfBackground.r},${dominantColorOfBackground.g},${dominantColorOfBackground.b},1)`,
         dotScale: 0.75,
         eye_outer: 1,
@@ -275,8 +275,14 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
 
   rePositionQRCode = (e) => {
     e.preventDefault();
+
     this.setState({ previewMode: false });
     this.drawImageInCanvas(this.state.file, DRAW_BACKGROUND);
+  }
+
+  downloadCanvas = (e) => {
+    e.target.href = this.refCanvas.toDataURL(); //eslint-disable-line
+    e.target.download = 'download.png'; //eslint-disable-line
   }
 
   render() {
@@ -378,13 +384,16 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
                 </div>
               </div>
               <div className="row btn-action">
-                <div className="col-sm-6 col-lg-6">
+                <div className="col-sm-12 col-lg-4 m-b-5">
                   <button className="btn btn-default btn-block" onClick={(e) => this.rePositionQRCode(e)}>
-                    Reposition QR Code
+                    Reposition
                   </button>
                 </div>
-                <div className="col-sm-6 col-lg-6">
+                <div className="col-sm-12 col-lg-4 m-b-5">
                   <button className="btn btn-default btn-block">Preview</button>
+                </div>
+                <div className="col-sm-12 col-lg-4 m-b-5">
+                  <a className="btn btn-default btn-block" onClick={(e) => this.downloadCanvas(e)}>Download</a>
                 </div>
               </div>
             </div>
