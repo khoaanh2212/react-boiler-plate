@@ -19,7 +19,6 @@ import { VISUAL_CODE_FORM } from './constants';
 import blankQRCode from './Images/qr-code_QRzebra.svg';
 import { actionGetQRCode } from './actions';
 
-// import Naive from './Naive';
 
 export const Wrapper = styled.div`
   .container-qrfields {
@@ -120,9 +119,6 @@ export const Wrapper = styled.div`
   }
 `;
 
-const DRAW_BACKGROUND = 'DRAW_BACKGROUND';
-const DRAW_QRCODE = 'DRAW_QRCODE';
-
 export class CustomVisualCode extends React.Component { //eslint-disable-line
   constructor(props) {
     super(props);
@@ -131,8 +127,8 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
       indexImage: 0,
       x: 0,
       y: 0,
-      width: 200,
-      height: 200,
+      width: 300,
+      height: 300,
       canvasWidth: 270,
       canvasHeight: 270,
       previewMode: false,
@@ -145,8 +141,7 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
     return new Promise((resolve, reject) => {
       const { dominantColorOfBackground } = this.state;
       const data = {
-        text: 'http://www.qrzebra.com',
-        // size: 300,
+        text: 'http://www.vnexpress.net',
         colorDark: `rgba(${dominantColorOfBackground.r},${dominantColorOfBackground.g},${dominantColorOfBackground.b},1)`,
         dotScale: 0.75,
         eye_outer: 1,
@@ -156,7 +151,8 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
       onGetCode(data, resolve, reject);
     }).then((result) => {
       this.setState({ previewMode: true });
-      console.log(result);
+      const base64String = `data:image/png;base64,${result}`;
+      this.drawQRCode(base64String);
     });
   }
 
@@ -172,7 +168,7 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
       });
     };
     reader.readAsDataURL(file);
-    this.drawImageInCanvas(file, DRAW_BACKGROUND);
+    this.drawBackgroundImageInCanvas(file);
   }
 
   getMaxWidthCanvas = () => {
@@ -239,10 +235,9 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
     this.props.change('background', null);
   }
 
-  drawImageInCanvas = (file, drawStatus) => {
+  drawBackgroundImageInCanvas = (file) => {
     const ctx = this.refCanvas.getContext('2d');
     const url = URL.createObjectURL(file);
-
     const img = new Image();
     const me = this;
     img.src = url;
@@ -254,30 +249,30 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
       const newHeight = imgHeight * ratio;
       const rgb = me.getAverageRGB(this);
       me.setState({ canvasWidth: maxWidth, canvasHeight: newHeight, dominantColorOfBackground: rgb });
-      if (drawStatus === DRAW_BACKGROUND) {
-        ctx.drawImage(this, 0, 0, maxWidth, newHeight);
-      } else if (drawStatus === DRAW_QRCODE) {
-        const { x, y, width, height } = me.state;
-        ctx.drawImage(this, x, y, width, height);
-      }
+      ctx.drawImage(this, 0, 0, maxWidth, newHeight);
 
       // this line needs to go here
       const dataImg = me.refCanvas.toDataURL(); // eslint-disable-line
-      // console.log(dataImg);
       // consider a callback to pass result to next function in chain
     };
-    // img.src = url;
   }
 
-  positionPlaceCode = (left, top) => {
-    this.setState({ left, top });
+  drawQRCode = (base64) => {
+    const ctx = this.refCanvas.getContext('2d');
+    const img = new Image();
+    const me = this;
+    img.src = base64;
+    img.onload = function () {
+      const { x, y, width, height } = me.state;
+      ctx.drawImage(this, x, y, width, height);
+    };
   }
 
   rePositionQRCode = (e) => {
     e.preventDefault();
 
     this.setState({ previewMode: false });
-    this.drawImageInCanvas(this.state.file, DRAW_BACKGROUND);
+    this.drawBackgroundImageInCanvas(this.state.file);
   }
 
   downloadCanvas = (e) => {
