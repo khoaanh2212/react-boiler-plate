@@ -289,40 +289,43 @@ export class LogoCode extends React.Component { //eslint-disable-line
 
           </div>
         </div>
-        <div className={`form-group eye-color row ${!formCustomEyeColor && 'hidden'}`}>
-          <label className="text-bold" htmlFor="eyeColor"><FormattedMessage {...messages.eyeColor} /></label>
-          <div className="col-sm-6 col-lg-4">
-            <Field
-              id="eyeFirstColor"
-              className="form-control "
-              name="eyeFirstColor"
-              component={RenderColorPicker}
-              type="text"
-            />
-          </div>
-          <div className="col-sm-6 col-lg-4">
-            <Field
-              id="eyeSecondColor"
-              className="form-control"
-              name="eyeSecondColor"
-              component={RenderColorPicker}
-              type="text"
-            />
-          </div>
-          <div className="col-sm-6 col-lg-4 form-group">
-            <div className="input-group">
-              <span className="input-group-btn">
-                <button className="btn btn-swap" type="button" onClick={() => this.switchEyeColor()}>
-                  <i className="fa fa-exchange"></i>
-                </button>
-              </span>
-              <span className="input-group-btn copy-foreground">
-                <button className="btn btn-swap" type="button" onClick={() => this.copyForeGround()}>
-                  <FormattedMessage {...messages.copyForeground} />
-                </button>
-              </span>
+        <div className={`${!formCustomEyeColor && 'hidden'}`}>
+          <div className={`form-group eye-color row ${!formCustomEyeColor && 'hidden'}`}>
+            <label className="text-bold ml-1" htmlFor="eyeColor"><FormattedMessage {...messages.eyeColor} /></label>
+            <div className="flex">
+              <div className="col-sm-6 col-lg-4">
+                <Field
+                  id="eyeFirstColor"
+                  className="form-control "
+                  name="eyeFirstColor"
+                  component={RenderColorPicker}
+                  type="text"
+                />
+              </div>
+              <div className="col-sm-6 col-lg-4">
+                <Field
+                  id="eyeSecondColor"
+                  className="form-control"
+                  name="eyeSecondColor"
+                  component={RenderColorPicker}
+                  type="text"
+                />
+              </div>
+              <div className="col-sm-6 col-lg-4 form-group">
+                <div className="input-group">
+                  <span className="input-group-btn">
+                    <button className="btn btn-swap" type="button" onClick={() => this.switchEyeColor()}>
+                      <i className="fa fa-exchange"></i>
+                    </button>
+                  </span>
+                  <span className="input-group-btn copy-foreground">
+                    <button className="btn btn-swap" type="button" onClick={() => this.copyForeGround()}>
+                      <FormattedMessage {...messages.copyForeground} />
+                    </button>
+                  </span>
+                </div>
+              </div>
             </div>
-
           </div>
         </div>
         <div className="form-group row">

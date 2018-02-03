@@ -60,7 +60,7 @@ export class Home extends React.PureComponent { // eslint-disable-line react/pre
             onClick={() => this.toggleTab(LOGO_QR_CODE)}
           ><FormattedMessage {...messages.logoQRCode} /></Link>
         </div>
-        <div className="settings">
+        <div className="settings mb-4">
           <div className="container-fluid">
             {activeTab === VISUAL_QR_CODE && <div className="row inner">
               <div className="col-md-12 settings-options">
