@@ -12,6 +12,8 @@ import { createStructuredSelector } from 'reselect';
 import RenderFileField from 'components/RenderFileField';
 import BubbleSpinLoader from 'components/BubbleSpinLoader';
 
+import { decorateUrl } from 'utils/common';
+
 import { makeSelectLoading } from 'containers/App/selectors';
 
 import messages from './messages';
@@ -141,7 +143,7 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
     return new Promise((resolve, reject) => {
       const { dominantColorOfBackground } = this.state;
       const data = {
-        text: 'http://www.vnexpress.net',
+        text: decorateUrl(values.get('url')),
         colorDark: `rgba(${dominantColorOfBackground.r},${dominantColorOfBackground.g},${dominantColorOfBackground.b},1)`,
         dotScale: 0.75,
         eye_outer: 1,
