@@ -354,10 +354,10 @@ export class CustomVisualCode extends React.Component { //eslint-disable-line
                       right: false,
                       bottom: false,
                       left: false,
-                      topRight: true,
-                      bottomRight: true,
-                      bottomLeft: true,
-                      topLeft: true,
+                      topRight: false,
+                      bottomRight: false,
+                      bottomLeft: false,
+                      topLeft: false,
                     }}
                     onDragStop={(e, d) => {
                       this.setState({ x: d.x, y: d.y });
